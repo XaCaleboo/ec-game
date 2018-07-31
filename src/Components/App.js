@@ -42,8 +42,8 @@ class NormalLoginForm extends React.Component {
     return (
       <Row type="flex" justify="center" align="middle" className="row">
         <Col xs={{span: 24}} sm={{span: 16}} md={{span: 12}} lg={{span: 9}} xl={{span: 8}}>
-          <Card hoverable>
-            <Form onSubmit={this.handleSubmit} className="login-form">
+          <Card>
+            <Form onSubmit={this.handleSubmit}>
               <FormItem>
                 {getFieldDecorator('userName', {
                   rules: [{ required: true, message: 'Введите логин' }],
