@@ -1,11 +1,5 @@
 @import '~antd/dist/antd.css';
 
-body {
-  background-color: #ececec;
-}
-
-.App {
-  text-align: center;
-  display: flex;
-  justify-content: center;
+.row {
+  min-height: 100vh;
 }
