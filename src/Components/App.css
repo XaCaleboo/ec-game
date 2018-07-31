@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+body {
+  background-color: rgb(245, 245, 245);
+}
+
 .row {
   min-height: 100vh;
 }
