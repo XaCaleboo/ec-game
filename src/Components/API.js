@@ -1,13 +1,14 @@
 const fetchData = async (values) => {
-    const url = 'https://zzaakiirr.pythonanywhere.com/login/';
+    const url = '/login/';
     const response = await fetch(url, {
         method: 'POST',
+        mode: 'cors',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Accept': 'text/html,application/xhtml',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Access-Control-Allow-Origin': '*'
         },
-        body: JSON.stringify(values)
+        body: 'username=user_0&password=user_0_password'
     });
     const content = await response.json();
     if (!content.exception)

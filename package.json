@@ -2,7 +2,7 @@
   "name": "ec-game",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://zzaakiirr.pythonanywhere.com",
+  "proxy": "https://zzaakiirr.pythonanywhere.com",
   "dependencies": {
     "antd": "^3.7.1",
     "react": "^16.4.1",
