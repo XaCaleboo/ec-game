@@ -1,8 +1,9 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import { Card } from 'antd';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import './App.css';
+import { fetchData } from './API';
 
 const FormItem = Form.Item;
 
@@ -23,7 +24,10 @@ class NormalLoginForm extends React.Component {
             },
           });
           console.log('Received values of form: ', values);
+
+          fetchData(values)
         }
+
         else {
           this.setState({
             status: {
@@ -41,11 +45,11 @@ class NormalLoginForm extends React.Component {
     const status = this.state.status
     return (
       <Row type="flex" justify="center" align="middle" className="row">
-        <Col xs={{span: 24}} sm={{span: 16}} md={{span: 12}} lg={{span: 9}} xl={{span: 8}}>
+        <Col xs={{ span: 24 }} sm={{ span: 16 }} md={{ span: 12 }} lg={{ span: 9 }} xl={{ span: 8 }}>
           <Card>
-            <Form onSubmit={this.handleSubmit}>
+            <Form onSubmit={this.handleSubmit} className='login-form'>
               <FormItem>
-                {getFieldDecorator('userName', {
+                {getFieldDecorator('login', {
                   rules: [{ required: true, message: 'Введите логин' }],
                 })(
                   <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Логин" />
