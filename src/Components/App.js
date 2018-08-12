@@ -1,41 +1,47 @@
-import React from 'react';
-import { Row, Col } from 'antd';
-import { Card } from 'antd';
-import { Form, Icon, Input, Button } from 'antd';
+import React, { Component } from 'react';
+import { Row, Col, Card, Form, Icon, Input, Button, message } from 'antd';
 import './App.css';
-import { fetchData } from './API';
+import { requestPOST } from './Requests';
 
 const FormItem = Form.Item;
 
-class NormalLoginForm extends React.Component {
+class App extends Component {
   state = {
-    status: {}
+    success: false,
   };
 
-  handleSubmit = (e, value) => {
+  checkUsername = (rule, value, callback) => {
+    if ((value.length < 5) || (value.length > 150)) {
+      callback('От 5 до 150 символов');
+    }
+    if (value.search(/[^a-zA-Z0-9\@\.\+\-\_]/) >= 0) {
+      callback('Только a-z, A-Z, 0-9 и символы @/./+/-/_');
+    }
+    callback();
+  }
+
+  checkPassword = (rule, value, callback) => {
+    if ((value.length < 8) || (value.length > 150)) {
+      callback('От 8 до 150 символов');
+    }
+    callback();
+  }
+
+  handleSubmit = (e) => {
     e.preventDefault();
+    
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        if (values.password.length >= 8) {
-          this.setState({
-            status: {
-              validateStatus: 'success',
-              errorMsg: null,
-            },
-          });
-          console.log('Received values of form: ', values);
-
-          fetchData(values)
-        }
-
-        else {
-          this.setState({
-            status: {
-              validateStatus: 'error',
-              errorMsg: 'Не менее 8 символов',
-            },
-          });
-        }
+        requestPOST('/login/', values).then((result)=>{
+          if (result.success) {
+            message.success('Успешно');
+          } else {
+            message.error('Не верный логин или пароль');
+          }
+        }).catch((err)=>{
+          message.error('Ошибка соединения с сервером. Повторите позже');
+          console.log(err);
+        });
       }
     })
   }
@@ -49,15 +55,17 @@ class NormalLoginForm extends React.Component {
           <Card>
             <Form onSubmit={this.handleSubmit} className='login-form'>
               <FormItem>
-                {getFieldDecorator('login', {
-                  rules: [{ required: true, message: 'Введите логин' }],
+                {getFieldDecorator('username', {
+                  rules: [{
+                    validator: this.checkUsername
+                  }],
                 })(
                   <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Логин" />
                 )}
               </FormItem>
-              <FormItem validateStatus={status.validateStatus} help={status.errorMsg}>
+              <FormItem>
                 {getFieldDecorator('password', {
-                  rules: [{ required: true, message: 'Введите пароль' }],
+                  rules: [{ validator: this.checkPassword }],
                 })(
                   <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Пароль" />
                 )}
@@ -75,6 +83,4 @@ class NormalLoginForm extends React.Component {
   }
 }
 
-const App = Form.create()(NormalLoginForm);
-
-export default App;
+export default Form.create()(App);
